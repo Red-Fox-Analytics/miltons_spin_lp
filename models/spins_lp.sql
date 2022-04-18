@@ -61,7 +61,7 @@ select product_level ,subcategory ,brand , product_universe , upc , time_period 
 			, max(number_of_weeks_selling_2_yago) as weeks_selling_2_yago
 			, max(number_of_weeks_selling_yago) as weeks_selling_yago
 			, avg((case when size_size='' or size_size is null then null else cast(size_size as float) end) ) as avg_size
-	from {{ source('public','miltons_spins_lp_2y') }} msly--public.miltons_spins_lp_2y msly 
+	from {{ source('miltons_spin', 'miltons_spins_lp_2y') }} msly--public.miltons_spins_lp_2y msly 
 	group by product_level ,subcategory ,brand , product_universe , upc , time_period, time_period_end_date, geography , positioning_group , category , company
 			, product_type , diet_keto_diet , diet_plant_based_diet , flavor , ingredient_oat , ingredient_soy_allergen 
 			, ingredient_wheat_allergen , labeled_allergen_friendly , labeled_grain_free , labeled_gluten_free , labeled_non_gmo 
@@ -189,8 +189,10 @@ select *
     , cast(unit_sales as float)/nullif(stores_sellinh0) as unit_sales_stores_selling
     , nullif(cast(unit_sales_2_yago as float),0)/nullif(stores_selling_2_yago,0) as unit_sales_stores_selling_2_yago
     , nullif(cast(unit_sales_yago as float),0)/nullif(stores_selling_yago,0) as unit_sales_stores_selling_yago
-    , (cast(unit_sales as float)/nullif(stores_selling,0))/nullif(cast(unit_sales_2_yago as float),0)/nullif(stores_selling_2_yago,0) -1 as unit_sales_stores_selling_per_change_2_yago
-    , (cast(unit_sales as float)/nullif(stores_selling,0))/nullif(cast(unit_sales_yago as float),0)/nullif(stores_selling_yago,0) -1 as unit_sales_stores_selling_per_change_yago
+    , (cast(unit_sales as float)/nullif(stores_selling,0))
+        /nullif(cast(unit_sales_2_yago as float)/nullif(stores_selling_2_yago,0),0) -1 as unit_sales_stores_selling_per_change_2_yago
+    , (cast(unit_sales as float)/nullif(stores_selling,0))
+        /nullif(cast(unit_sales_yago as float)/nullif(stores_selling_yago,0),0) -1 as unit_sales_stores_selling_per_change_yago
 	, cast(unit_sales as float)/nullif(tdp,0) as unit_sales_tdp
 	, cast(unit_sales_2_yago as float)/nullif(tdp_2_yago,0) as unit_sales_tdp_2_yago
 	, cast(unit_sales_yago as float)/nullif(tdp_yago,0) as unit_sales_tdp_yago
@@ -272,7 +274,7 @@ select *
 	, (unit_sales_promo/nullif(weeks_selling,0)/nullif(stores_selling,0)/nullif(avg_no_items,0))
 		/nullif(unit_sales_promo_2_yago/nullif(weeks_selling_2_yago,0)/nullif(stores_selling_2_yago,0)/nullif(avg_no_items_2_yago,0),0) -1 as unit_sales_promo_stores_weeks_avg_no_items_per_change_2_yago
 	, (unit_sales_promo/nullif(weeks_selling,0)/nullif(stores_selling,0)/nullif(avg_no_items,0))
-		/nullif(unit_sales_promo_yago/nullif(weeks_selling_yago,0)/nullif(stores_selling_yago,0)/nullif(avg_no_items_yago,0),0) -1 as unit_sales_promo_stores_weeks_avg_no_items_per_change_yago
+		/nullif(unit_sales_promo_yago/nullif(weeks_selling_yago,0)/nullif(stores_selling_yago,0)/nullif(avg_no_items_yago,0),0) -1 as unit_sales_promo_stores_weeks_avg_no_Сљems_per_change_yago
 	, incremental_unit_sales/nullif(base_unit_sales_promo,0) as unit_lift
 	, incremental_unit_sales_2_yago/nullif(base_unit_sales_promo_2_yago,0) as unit_lift_2_yago
 	, incremental_unit_sales_yago/nullif(base_unit_sales_promo_yago,0) as unit_lift_yago
