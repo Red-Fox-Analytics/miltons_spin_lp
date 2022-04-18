@@ -61,7 +61,7 @@ select product_level ,subcategory ,brand , product_universe , upc , time_period 
 			, max(number_of_weeks_selling_2_yago) as weeks_selling_2_yago
 			, max(number_of_weeks_selling_yago) as weeks_selling_yago
 			, avg((case when size_size='' or size_size is null then null else cast(size_size as float) end) ) as avg_size
-	from public.miltons_spins_lp_2y msly 
+	from {{source("public","miltons_spin_lp_2y")}} msly--public.miltons_spins_lp_2y msly 
 	group by product_level ,subcategory ,brand , product_universe , upc , time_period, time_period_end_date, geography , positioning_group , category , company
 			, product_type , diet_keto_diet , diet_plant_based_diet , flavor , ingredient_oat , ingredient_soy_allergen 
 			, ingredient_wheat_allergen , labeled_allergen_friendly , labeled_grain_free , labeled_gluten_free , labeled_non_gmo 
