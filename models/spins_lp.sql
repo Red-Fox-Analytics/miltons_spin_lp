@@ -102,7 +102,7 @@ select *
 	, cast(incremental_sales_yago as float)/nullif(base_dollars_promo_yago,0) lift_yago
 	, cast(incremental_sales_2_yago as float)/nullif(base_dollars_promo_2_yago,0) lift_2_yago
 	, cast(sales as float)/nullif(sales_2_yago,0) -1 sales_per_change_2_yago
-	, cast(sales as float)/nullif(sales_yago,0) -1 sales_per_change_2_yago
+	, cast(sales as float)/nullif(sales_yago,0) -1 sales_per_change_yago
 	, cast(sales as float) - nullif(sales_2_yago,0) sales_change_2_yago
 	, cast(sales as float) - nullif(sales_yago,0) sales_change_yago
 	, cast(sales_display_only as float)/nullif(sales_display_only_2_yago,0) -1 sales_display_only_per_change_2_yago
@@ -112,7 +112,7 @@ select *
 	, cast(sales_yago as float) - sales_promo_yago sales_non_promo_yago
 	, cast(sales_feature_only as float)/nullif(sales_feature_only_2_yago,0) -1 sales_feature_only_per_change_2_yago
 	, cast(sales_feature_only as float)/nullif(sales_feature_only_yago,0) -1 sales_feature_only_per_change_yago
-	, cast(sales_feature_only as float)/nullif(sales_feature_only_2_yago,0) -1 sales_feature_only_per_change_2_yago
+
 	, cast(sales_feat_and_disp as float)/nullif(sales_feat_and_disp_2_yago,0) -1 sales_feat_and_disp_per_change_2_yago
 	, cast(sales_feat_and_disp as float)/nullif(sales_feat_and_disp_yago,0) -1 sales_feat_and_disp_per_change_yago
 	, cast(sales_promo as float)/nullif(sales_promo_2_yago,0) -1 as sales_promo_per_change_2_yago
@@ -186,7 +186,7 @@ select *
 	, cast(unit_sales_yago as float)/nullif(max_acv_yago,0) as unit_sales_acv_yago
 	, (cast(unit_sales as float)/nullif(max_acv,0))/nullif((cast(unit_sales_2_yago as float)/nullif(max_acv_2_yago,0)),0) -1 as unit_sales_acv_per_change_2_yago
 	, (cast(unit_sales as float)/nullif(max_acv,0))/nullif((cast(unit_sales_yago as float)/nullif(max_acv_yago,0)),0) -1 as unit_sales_acv_per_change_yago
-    , cast(unit_sales as float)/nullif(stores_sellinh0) as unit_sales_stores_selling
+    , cast(unit_sales as float)/nullif(stores_selling,0) as unit_sales_stores_selling
     , nullif(cast(unit_sales_2_yago as float),0)/nullif(stores_selling_2_yago,0) as unit_sales_stores_selling_2_yago
     , nullif(cast(unit_sales_yago as float),0)/nullif(stores_selling_yago,0) as unit_sales_stores_selling_yago
     , (cast(unit_sales as float)/nullif(stores_selling,0))
@@ -254,8 +254,7 @@ select *
 	, avg_no_items/nullif(avg_no_items_2_yago,0) -1 as avg_no_items_per_change_2_yago
 	, avg_no_items/nullif(avg_no_items_yago,0) -1 as avg_no_items_per_change_yago
 	, base_arp/nullif(base_arp_yago,0) -1 as base_arp_per_change_yago
-	, base_arp-base_arp_yago as base_arp_pt_change_yago
-	, base_arp-base_arp_2_yago as base_arp_pt_change_2_yago
+
 	, base_unit_sales/nullif(weeks_selling,0)/nullif(stores_selling,0)/nullif(avg_no_items,0) as base_unit_sales_stores_weeks_avg_no_items
 	, base_unit_sales_2_yago/nullif(weeks_selling_2_yago,0)/nullif(stores_selling_2_yago,0)/nullif(avg_no_items_2_yago,0) as base_unit_sales_stores_weeks_avg_no_items_2_yago
 	, base_unit_sales_yago/nullif(weeks_selling_yago,0)/nullif(stores_selling_yago,0)/nullif(avg_no_items_yago,0) as base_unit_sales_stores_weeks_avg_no_items_yago
@@ -308,7 +307,7 @@ from level_2
 )
 select *
 	, sales_change_yago-(change_due_to_distribution+change_due_to_pricing+change_due_to_promotion) change_due_to_velocity_ao
-	, sales_change_2_yago-(change_due_to_distribution_2_yago+change_due_to_pricing_2_yago+change_due_to_promotion_2_yago) change_due_to_velocity_ao
+	, sales_change_2_yago-(change_due_to_distribution_2_yago+change_due_to_pricing_2_yago+change_due_to_promotion_2_yago) change_due_to_velocity_ao_2_yago
 	, sales/nullif(gdp,0) sales_gdp
 	, unit_sales/nullif(gdp,0) unit_sales_gdp
 	, case when abs(unit_sales_stores_weeks_avg_no_items_per_change_2_yago_raw) >10 then null else unit_sales_stores_weeks_avg_no_items_per_change_2_yago_raw-1 end as unit_sales_stores_weeks_avg_no_items_per_change_2_yago
