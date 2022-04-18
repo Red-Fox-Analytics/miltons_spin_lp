@@ -1,0 +1,11 @@
+
+version: 2
+
+models:
+  - name: spins_lp
+    description: "Spins lp"
+    columns:
+      - name: product_level
+        description: "Product Level"
+  
+ 

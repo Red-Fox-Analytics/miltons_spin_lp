@@ -7,7 +7,7 @@ version: '1.0.0'
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'miltons_spin_lp'
+profile: 'default'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -34,6 +34,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   miltons_spin_lp:
     # Config indicated by + and applies to all files under models/example/
-    +materialized: view
+    +materialized: table
     example:
       +materialized: view
